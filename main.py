@@ -179,41 +179,41 @@ EE = FF * RR  # Unidad de Energia
 
 GG = (MM * G * TT ** 2) / (RR ** 3)
 
-Me = Me / MM  # Normalized mass of Earth
-Ms = Ms / MM  # Normalized mass of Sun
-Mj = 500 * Mj / MM  # Normalized mass of Jupiter/Super Jupiter
+Me = Me / MM  # Se normaliza la Masa de la Tierra
+Ms = Ms / MM  # Se normaliza la Masa del SOl
+Mj = 500 * Mj / MM  # Se normaliza la Masa de Jupiter y Super Jupiter
 
-ti = 0  # initial time = 0
-tf = 120  # final time = 120 years
+ti = 0  # Tiempo inicial = 0
+tf = 120  # Tiempo final = 120 años
 
-N = 100 * tf  # 100 points per year
-t = np.linspace(ti, tf, N)  # time array from ti to tf with N points
+N = 100 * tf  
+t = np.linspace(ti, tf, N)  
 
-h = t[2] - t[1]  # time step (uniform)
+h = t[2] - t[1]  
 
 # Initialization
 
-KE = np.zeros(N)  # Kinetic energy
-PE = np.zeros(N)  # Potential energy
-AM = np.zeros(N)  # Angular momentum
+KE = np.zeros(N)  # Energia Cinetica
+PE = np.zeros(N)  # Energia Potencial
+AM = np.zeros(N)  # Momentum Angular
 AreaVal = np.zeros(N)
 
-r = np.zeros([N, 2])  # position vector of Earth
-v = np.zeros([N, 2])  # velocity vector of Earth
-rj = np.zeros([N, 2])  # position vector of Jupiter
-vj = np.zeros([N, 2])  # velocity vector of Jupiter
+r = np.zeros([N, 2])  
+v = np.zeros([N, 2])  
+rj = np.zeros([N, 2]) 
+vj = np.zeros([N, 2]) 
 
-ri = [1496e8 / RR, 0]  # initial position of earth
-rji = [5.2, 0]  # initial position of Jupiter
+ri = [1496e8 / RR, 0] 
+rji = [5.2, 0]  
 
-vv = np.sqrt(Ms * GG / ri[0])  # Magnitude of Earth's initial velocity
+vv = np.sqrt(Ms * GG / ri[0])  
 
-vvj = 13.06e3 * TT / RR  # Magnitude of Jupiter's initial velocity
+vvj = 13.06e3 * TT / RR  
 
-vi = [0, vv * 1.0]  # Initial velocity vector for Earth.Taken to be along y direction as ri is on x axis.
-vji = [0, vvj * 1.0]  # Initial velocity vector for Jupiter
+vi = [0, vv * 1.0]  
+vji = [0, vvj * 1.0]
 
-# Initializing the arrays with initial values.
+
 t[0] = ti
 r[0, :] = ri
 v[0, :] = vi
@@ -263,7 +263,7 @@ py.ylim([4, 8])
 mplot(4, t, AreaVal, r'Time, $t$ (years)', r'Sweeped Area ($AU^2$)', 'black', lbl)
 
 
-# Animation function. Reads out the positon coordinates sequentially
+# Funcion de Animacion. Lee las coordenadas secuenciales del movimiento
 def animate(i):
     earth_trail = 40;
     jupiter_trail = 200;
@@ -275,19 +275,19 @@ def animate(i):
     return (line1, line2)
 
 
-# Function for setting up the animation
+# Funcion para configurar la forma resultante de la animación
 
 fig, ax = py.subplots()
 ax.axis('square')
 ax.set_xlim((-7.2, 7.2))
 ax.set_ylim((-7.2, 7.2))
-ax.get_xaxis().set_ticks([])  # enable this to hide x axis ticks
-ax.get_yaxis().set_ticks([])  # enable this to hide y axis ticks
+ax.get_xaxis().set_ticks([])  
+ax.get_yaxis().set_ticks([])  
 
 ax.plot(0, 0, 'o', markersize=9, markerfacecolor="#FDB813", markeredgecolor="#FD7813")
 line1, = ax.plot([], [], 'o-', color='#d2eeff', markevery=10000, markerfacecolor='#0077BE', lw=2)  # line for Earth
 line2, = ax.plot([], [], 'o-', color='#e3dccb', markersize=8, markerfacecolor='#f66338', lw=2,
-                 markevery=10000)  # line for Jupiter
+                 markevery=10000)  
 
 ax.plot([-6, -5], [6.5, 6.5], 'r-')
 ax.text(-4.5, 6.3, r'1 AU = $1.496 \times 10^8$ km')
@@ -302,15 +302,8 @@ ax.plot(5, -6.2, 'o', markersize=9, markerfacecolor="#FDB813", markeredgecolor="
 ax.text(5.5, -6.4, 'Sun')
 ttl = ax.text(0.24, 1.05, '', transform=ax.transAxes, va='center')
 
-
-#plt.title('Elapsed time, T=%i years' %u)
-
-# Call animation function
 anim = animation.FuncAnimation(fig, animate, init_func=init,
                                frames=4000, interval=5, blit=True)
 
 HTML(anim.to_html5_video())
-
-# Enable the following line if you want to save the animation to file.
-
 anim.save('orbit.mp4', fps=30,dpi = 500, extra_args=['-vcodec', 'libx264'])
